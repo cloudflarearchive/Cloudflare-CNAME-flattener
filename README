@@ -1,0 +1,1 @@
+Need to use an Amazon ELB at the root domain on CloudFlare, but having a CNAME at the root is screwing up e-mail? This should help.
