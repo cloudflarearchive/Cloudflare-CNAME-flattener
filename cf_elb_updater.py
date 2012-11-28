@@ -3,6 +3,7 @@
 import subprocess
 import json
 import urllib
+import socket
 
 #Augh, global variables
 ELB='[INSERT ELB RECORD HERE]'
@@ -17,10 +18,8 @@ def call_api(params):
 	return go.read()
 
 def get_new_ips():
-	dns_ips = subprocess.check_output(['dig','+short', ELB])
-	dns_ips = dns_ips.split()
-	
-	return dns_ips
+    resolve = socket.gethostbyname_ex(ELB)
+    return resolve[2]
 
 def recordList(): 
 	params = urllib.urlencode({
