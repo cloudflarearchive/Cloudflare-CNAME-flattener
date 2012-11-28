@@ -3,6 +3,7 @@
 import subprocess
 import json
 import urllib
+import socket
 
 #Augh, global variables
 ELB='[INSERT ELB RECORD HERE]'
@@ -17,10 +18,8 @@ def call_api(params):
 	return go.read()
 
 def get_new_ips():
-	dns_ips = subprocess.check_output(['dig','+short', ELB])
-	dns_ips = dns_ips.split()
-	
-	return dns_ips
+    resolve = socket.gethostbyname_ex(ELB)
+    return resolve[2]
 
 def recordList(): 
 	params = urllib.urlencode({
@@ -31,8 +30,7 @@ def recordList():
 	return call_api(params)
 
 def getCurrentIPs():
-	decoder = json.JSONDecoder()
-	records = decoder.decode(recordList())
+	records = json.loads(recordList())
 	ips = dict()
 	for record in records['response']['recs']['objs']:
 		if record['name'] == RECORD_NAME:
@@ -83,13 +81,12 @@ def compareDNS():
 	cf_records = getCurrentIPs()
 	elb_ips = get_new_ips()
 	do_not_touch = list()	
-	decoder = json.JSONDecoder()
 
 	for ip in elb_ips:
 		if ip not in cf_records:
 			print "Adding Record " + ip
-			response = decoder.decode(addRecord(ip))
-			print proxyRecord(response['response']['rec']['obj']['rec_id'], response['response']['rec']['obj']['rec_tag'])
+			response = json.loads(addRecord(ip))
+			proxyRecord(response['response']['rec']['obj']['rec_id'], response['response']['rec']['obj']['rec_tag'])
 		else:
 			print "Ignoring rec_id: " + cf_records[ip]
 			do_not_touch.append(cf_records[ip])
