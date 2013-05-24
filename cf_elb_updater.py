@@ -6,11 +6,11 @@ import urllib
 import socket
 
 #Augh, global variables
-ELB='[INSERT ELB RECORD HERE]'
-API='[YOUR CLIENT API KEY]'
-EMAIL='[YOUR CLOUDFLARE E-MAIL]'
-DOMAIN='[CLOUDFLARE DOMAIN]'
-RECORD_NAME='[NAME OF RECORD]' #Use DOMAIN if it's the root record(s)
+ELB='[INSERT CNAME VALUE HERE]'    # Your CNAME value, i.e. myapp.herokuapp.com
+API='[YOUR CLIENT API KEY]'        # Your CloudFlare client API key found at https://www.cloudflare.com/my-account
+EMAIL='[YOUR CLOUDFLARE E-MAIL]'   # Your CloudFlare email address
+DOMAIN='[CLOUDFLARE DOMAIN NAME]'  # Your CloudFlare domain that you're using this for
+RECORD_NAME='[NAME OF RECORD]'     # Use DOMAIN if this is for the root domain
 
 
 def call_api(params):
