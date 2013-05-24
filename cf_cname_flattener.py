@@ -79,10 +79,10 @@ def pruneUnused(exclusion, current_records):
 
 def compareDNS():
 	cf_records = getCurrentIPs()
-	elb_ips = get_new_ips()
+	cname_ips = get_new_ips()
 	do_not_touch = list()	
 
-	for ip in elb_ips:
+	for ip in cname_ips:
 		if ip not in cf_records:
 			print "Adding Record " + ip
 			response = json.loads(addRecord(ip))
