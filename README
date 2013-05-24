@@ -7,12 +7,12 @@ This should help.
 --| High level |--
 ------------------
 
-This resolves the CNAME record to the associated A record(s), makes and API call to CloudFlare, and creates the necessary A record(s). This way you can have an A record at the root -- which should fix the email deliverability issues.
+This resolves the CNAME record to the associated A record(s), makes an API call to CloudFlare, and creates the necessary A record(s). This way you can have an A record at the root even if your host only provides you with a CNAME, and your email deliverability issues should be fixed.
 
 --------------------
 --| Instructions |--
 --------------------
 
 1.) Fill out the values at the top of the script.
-2.) Run the script the initial time and verify you now have A records in place of where the CNAME previously was. Confirm it's working correctly.
+2.) Run the script the initial time and verify you now have A records in place of the CNAME you previously had. Confirm it's working correctly.
 3.) Schedule a cron job to run this script as often as you feel comfortable with. The suggestion being every minute.
