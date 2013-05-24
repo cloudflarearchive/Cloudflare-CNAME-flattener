@@ -6,7 +6,7 @@ import urllib
 import socket
 
 #Augh, global variables
-ELB='[INSERT CNAME VALUE HERE]'    # Your CNAME value, i.e. myapp.herokuapp.com
+CNAME='[INSERT CNAME VALUE HERE]'    # Your CNAME value, i.e. myapp.herokuapp.com
 API='[YOUR CLIENT API KEY]'        # Your CloudFlare client API key found at https://www.cloudflare.com/my-account
 EMAIL='[YOUR CLOUDFLARE E-MAIL]'   # Your CloudFlare email address
 DOMAIN='[CLOUDFLARE DOMAIN NAME]'  # Your CloudFlare domain that you're using this for
@@ -18,7 +18,7 @@ def call_api(params):
 	return go.read()
 
 def get_new_ips():
-    resolve = socket.gethostbyname_ex(ELB)
+    resolve = socket.gethostbyname_ex(CNAME)
     return resolve[2]
 
 def recordList(): 
