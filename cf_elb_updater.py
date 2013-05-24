@@ -6,11 +6,11 @@ import urllib
 import socket
 
 #Augh, global variables
-ELB='[INSERT ELB RECORD HERE]'
-API='[YOUR CLIENT API KEY]'
-EMAIL='[YOUR CLOUDFLARE E-MAIL]'
-DOMAIN='[CLOUDFLARE DOMAIN]'
-RECORD_NAME='[NAME OF RECORD]' #Use DOMAIN if it's the root record(s)
+ELB='[INSERT CNAME VALUE HERE]'    # Your CNAME value, i.e. myapp.herokuapp.com
+API='[YOUR CLIENT API KEY]'        # Your CloudFlare client API key found at https://www.cloudflare.com/my-account
+EMAIL='[YOUR CLOUDFLARE E-MAIL]'   # Your CloudFlare email address
+DOMAIN='[CLOUDFLARE DOMAIN NAME]'  # Your CloudFlare domain that you're using this for
+RECORD_NAME='[NAME OF RECORD]'     # Use DOMAIN if this is for the root domain
 
 
 def call_api(params):
@@ -30,8 +30,7 @@ def recordList():
 	return call_api(params)
 
 def getCurrentIPs():
-	decoder = json.JSONDecoder()
-	records = decoder.decode(recordList())
+	records = json.loads(recordList())
 	ips = dict()
 	for record in records['response']['recs']['objs']:
 		if record['name'] == RECORD_NAME:
@@ -82,13 +81,12 @@ def compareDNS():
 	cf_records = getCurrentIPs()
 	elb_ips = get_new_ips()
 	do_not_touch = list()	
-	decoder = json.JSONDecoder()
 
 	for ip in elb_ips:
 		if ip not in cf_records:
 			print "Adding Record " + ip
-			response = decoder.decode(addRecord(ip))
-			print proxyRecord(response['response']['rec']['obj']['rec_id'], response['response']['rec']['obj']['rec_tag'])
+			response = json.loads(addRecord(ip))
+			proxyRecord(response['response']['rec']['obj']['rec_id'], response['response']['rec']['obj']['rec_tag'])
 		else:
 			print "Ignoring rec_id: " + cf_records[ip]
 			do_not_touch.append(cf_records[ip])
