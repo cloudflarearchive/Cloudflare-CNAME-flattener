@@ -11,7 +11,7 @@ CNAME = os.environ.get('CF_CNAME')   # Your CNAME value, i.e. myapp.herokuapp.co
 API = os.environ.get('CF_API_KEY')   # Your CloudFlare client API key found at https://www.cloudflare.com/my-account
 EMAIL = os.environ.get('CF_EMAIL')   # Your CloudFlare email address
 DOMAIN = os.environ.get('CF_DOMAIN') # Your CloudFlare domain that you're using this for
-RECORD_NAME = os.environ.get('CF_RECORD_NAME', 'DOMAIN') # Use DOMAIN if this is for the root domain
+RECORD_NAME = os.environ.get('CF_RECORD_NAME') # Use domain name (ex: 'example.com') if this is for the root domain
 
 
 def call_api(params):
