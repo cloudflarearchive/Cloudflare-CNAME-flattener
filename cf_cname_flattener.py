@@ -33,10 +33,11 @@ def recordList():
 def getCurrentIPs():
 	records = json.loads(recordList())
 	ips = dict()
-	for record in records['response']['recs']['objs']:
-		if record['name'] == RECORD_NAME:
-			if record['type'] == 'A':
-				ips[record['content']] = record['rec_id']
+	if checkApiResponse(records):
+		for record in records['response']['recs']['objs']:
+			if record['name'] == RECORD_NAME:
+				if record['type'] == 'A':
+					ips[record['content']] = record['rec_id']
 	return ips
 
 def addRecord(ip):
@@ -76,7 +77,16 @@ def pruneUnused(exclusion, current_records):
 	for ip, rec_id in current_records.iteritems():
 		if rec_id not in exclusion:
 			print "Deleting " + ip
-			print delRecord(rec_id)
+			delRecord(rec_id)
+
+def checkApiResponse(response):
+	if response['result'] == 'error':
+		print 'API returned an error, check your config environment variables'
+		if response['msg']:
+			print 'Message: "%s"' % response['msg']
+		return False
+	else:
+		return True
 
 def compareDNS():
 	cf_records = getCurrentIPs()
@@ -87,7 +97,8 @@ def compareDNS():
 		if ip not in cf_records:
 			print "Adding Record " + ip
 			response = json.loads(addRecord(ip))
-			proxyRecord(response['response']['rec']['obj']['rec_id'], response['response']['rec']['obj']['rec_tag'])
+			if checkApiResponse(response):
+				proxyRecord(response['response']['rec']['obj']['rec_id'], response['response']['rec']['obj']['rec_tag'])
 		else:
 			print "Ignoring rec_id: " + cf_records[ip]
 			do_not_touch.append(cf_records[ip])
@@ -95,4 +106,5 @@ def compareDNS():
 	pruneUnused(do_not_touch, cf_records)
 		
 	
-compareDNS()
+if __name__ == '__main__':
+	compareDNS()
