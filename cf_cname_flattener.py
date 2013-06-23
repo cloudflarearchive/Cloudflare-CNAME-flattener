@@ -4,13 +4,14 @@ import subprocess
 import json
 import urllib
 import socket
+import os
 
-#Augh, global variables
-CNAME='[INSERT CNAME VALUE HERE]'    # Your CNAME value, i.e. myapp.herokuapp.com
-API='[YOUR CLIENT API KEY]'        # Your CloudFlare client API key found at https://www.cloudflare.com/my-account
-EMAIL='[YOUR CLOUDFLARE E-MAIL]'   # Your CloudFlare email address
-DOMAIN='[CLOUDFLARE DOMAIN NAME]'  # Your CloudFlare domain that you're using this for
-RECORD_NAME='[NAME OF RECORD]'     # Use DOMAIN if this is for the root domain
+# Get config from environment variables
+CNAME = os.environ.get('CF_CNAME')   # Your CNAME value, i.e. myapp.herokuapp.com
+API = os.environ.get('CF_API_KEY')   # Your CloudFlare client API key found at https://www.cloudflare.com/my-account
+EMAIL = os.environ.get('CF_EMAIL')   # Your CloudFlare email address
+DOMAIN = os.environ.get('CF_DOMAIN') # Your CloudFlare domain that you're using this for
+RECORD_NAME = os.environ.get('CF_RECORD_NAME', 'DOMAIN') # Use DOMAIN if this is for the root domain
 
 
 def call_api(params):
@@ -80,7 +81,7 @@ def pruneUnused(exclusion, current_records):
 def compareDNS():
 	cf_records = getCurrentIPs()
 	cname_ips = get_new_ips()
-	do_not_touch = list()	
+	do_not_touch = list()
 
 	for ip in cname_ips:
 		if ip not in cf_records:
