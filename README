@@ -1,3 +1,5 @@
+Note: CloudFlare now does this automatically. See http://blog.cloudflare.com/introducing-cname-flattening-rfc-compliant-cnames-at-a-domains-root.
+
 Need to use a CNAME at the root of your website at CloudFlare?
 Is that causing email deliverability issues?
 
